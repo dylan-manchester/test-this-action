@@ -19,8 +19,7 @@ jobs:
         run: echo "::set-output name=day::$(date '+%A')"
   build:
     needs: get-day-of-the-week
-    if: ${{ needs.get-day-of-the-week.outputs.day != 'Friday' || github.event_name == 'workflow_dispatch' && github.ref_name == 'master' }} # Do not deploy on a Friday unless we manually triggered it on 
-master
+    if: ${{ needs.get-day-of-the-week.outputs.day != 'Friday' || github.event_name == 'workflow_dispatch' && github.ref_name == 'master' }} # Do not deploy on a Friday unless we manually triggered it on master
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 📥
