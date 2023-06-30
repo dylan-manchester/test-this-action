@@ -1,0 +1,30 @@
+name: Deploy API
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - "api/**"
+
+jobs:
+  get-day-of-the-week:
+    runs-on: ubuntu-latest
+    outputs:
+      day: ${{ steps.day.outputs.day }}
+    steps:
+      - name: Get day of the week
+        id: day
+        run: echo "::set-output name=day::$(date '+%A')"
+  build:
+    needs: get-day-of-the-week
+    if: ${{ needs.get-day-of-the-week.outputs.day != 'Friday' }} || ${{ 
+github.event_name == 'workflow_dispatch' }} && ${{github.ref_name == 
+'master'}} # Do not deploy on a Friday unless we manually triggered it on 
+master
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 📥
+        uses: actions/checkout@v3
+
